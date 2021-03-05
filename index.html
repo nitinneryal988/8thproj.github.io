@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Dynamic landing Page</title>
+</head>
+<style>
+	 * {
+	 box-sizing: border-box;
+	 margin:0;
+	 padding:0;
+	 }
+	 body {
+	 	font-family:'Quicksand',sans-serif;
+	 	display:flex;
+	 	flex-direction:column;
+	 	align-items:center;
+	 	justify-content:center;
+	 	text-align:center;
+	 	height:100vh;
+	 	color:black;
+	 }
+	 #time  {
+	 	font-size:8rem;
+	 }
+	 h1 {
+	 	margin-bottom:3rem;
+	 }
+	 h2 {
+	 	margin-bottom:9.5rem;
+	 	opacity:0.6;
+
+	 }
+	 @media(max-width:700px)  {
+	 	#time {
+	 		font-size:6rem;
+	 	}
+	 }
+
+
+
+</style>
+<body>
+   <time id="time">02:40:44 AM</time>
+   <h1>
+   	<span id="greeting">goodAfternoon</span>
+   	<span id="name" contenteditable="true"> </span>
+   </h1>
+   <h2> What is your focus for today ?</h2>
+   <h2 id="focus" contenteditable="true"> </h2>
+
+
+
+	<script>
+		
+       // Dom Element's
+
+      const time = document.getElementById('time'),
+           greeting = document.getElementById('greeting'),
+           name = document.getElementById('name'),
+           focus = document.getElementById('focus');
+
+
+
+           // show am/PM
+
+           const showAmPm = true ;
+
+              /// SHOW TIME 
+
+        function showTime()  { 
+        	let today = new Date(),
+        	 hour = today.getHours(),
+        	 min  = today.getMinutes(),
+        	 sec  = today.getSeconds();
+
+        	 // set AM / PM 
+         const 	 amPm = hour >= 12 ? 'pm'  : 'am' ;
+
+         // 12 Hours format 
+	     hour = hour % 12 || 12 ;
+
+	     // Output time 
+	     time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(sec)} ${showAmPm ? amPm :" "}`;
+	     setTimeout(showTime,1000);
+       }
+       /// ADD ZEROS 
+       function addZero(n)  {
+
+       return (parseInt(n,10) <10 ? '0':'') + n;
+       }
+        // set Background   GREETNG
+    function    setBGgreet()  {
+       let today = new Date(),
+       hour  = today.getHours();
+
+       if (hour < 12)  {
+       	   // Morning
+       	   document.body.style.background="url('mahadev.jpg')";
+       	   greeting.textContent = " good Morning";
+       	       // Afternoon
+       }	else if (hour< 18)  {
+           document.body.style.background="url('mahadev.jpg')";
+       	   greeting.textContent = " good  "     +   "   Afternoon";
+       	   document.body.style.background="cover";
+       	   // Evening 
+       	   } else {
+       	   	document.body.style.background="url('mahadev.jpg')";
+       	   greeting.textContent = " good Evening";
+       	   // Evening 
+       	    }
+    }
+/////// Get Name   ///
+
+         function getName()   {
+                if(localStorage.getItem('name') === null)  {
+             name.textContent = '[Enter name]';             
+           }  else {
+           	 name.textContent = localStorage.getItem('name')
+           }
+}
+                             /// set Name 
+        function setName(e)   {
+            if(e.type==='keypress') {
+            	///// Make sure the enter is pressed 
+            	if(e.which == 13 || e.keyCode == 13)  {
+
+                localStorage.setItem('name',e.target.innerText);
+                name.blur();
+            	}
+            } else {
+            	localStorage.setItem('name',e.target.innerText);
+            }}
+
+        // Get Focus 
+          function getFocus()   {
+           if(localStorage.getItem('focus') === null)  {
+             focus.textContent = '[Enter focus]';             
+           }  else {
+           	 focus.textContent = localStorage.getItem('focus')
+           }
+}
+//                              // SET FOCUS/////
+
+ function setFocus(e)   {
+            if(e.type==='keypress') {
+            	///// Make sure the enter is pressed 
+            	if(e.which == 13 || e.keyCode == 13)  {
+
+                localStorage.setItem('focus',e.target.innerText)
+                focus.blur();
+            	}
+
+            } else {
+            	 localStorage.setItem('focus' ,e.target.innerText);
+            }}
+        
+
+           name.addEventListener('keypress', setName);
+           name.addEventListener('blur', setName);
+           focus.addEventListener('keypress', setFocus);
+           focus.addEventListener('blur', setFocus);
+
+
+     
+
+
+    // run
+     showTime();
+     setBGgreet();
+     getName();
+     getFocus();
+
+
+
+	
+
+
+
+	</script>
+</body>
+</html>
